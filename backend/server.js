@@ -4,6 +4,8 @@ require("./database");
 // require("./database_func/siteinsert.js");
 const User=require("./Models/user");
 const Site=require("./Models/web_url");
+const FavNews=require("./Models/favnews");
+const path=require("path");
 const cors=require("cors");
 const app = express();
 app.use(cors());
@@ -11,7 +13,36 @@ app.use(express.json());
 // name: String,
 //     password:String,
 //     pincode:Number,
+app.get("/",(req,res)=>{
+res.sendFile();
+});
+
+app.post("/getFavNews",async (req,res)=>{
+  try{
+    const result=await FavNews.find({name:req.body.username});
+    console.log("the length is"+result.length);
+    res.send(result);
+  }catch(e){
+
+  }
+   
+});
+app.post("/addFavNews",async (req,res)=>{
+            const result=         await Site.find({_id:req.body.id});
+            try{
+              console.log("add result" + result);
+              const news= await   FavNews.create({name:req.body.username,webpage:result[0].webpage,num_visits:result[0].num_visits,num_reads:result[0].num_readers});
+              res.send({code:1});
+            }catch(e){
+             console.log(e);
+            }
+       
+       
+});
 app.post("/createUser",async (req,res)=>{
+    if(req.body.username="" || req.body.password=="" || req.body.pincode==""){
+      res.send({code:0});
+    }
   const result=  await User.find({name:req.body.username});
   if(result.length==0){
     const obj =await User.create({name:req.body.username,password:req.body.password,pincode:req.body.pincode});
