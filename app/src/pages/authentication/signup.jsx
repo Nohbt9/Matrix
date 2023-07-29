@@ -29,6 +29,9 @@ function SignUp() {
     <button onClick={async ()=>{
        const {data}=await  axios.post("http://localhost:800/createUser",{username:username,password:password,pincode:pincode});
        console.log(data.code);
+       if(data.code==1){
+        localStorage.setItem("username",data.username);
+       }
     }}>Sign In</button>
 </div>
 </div>

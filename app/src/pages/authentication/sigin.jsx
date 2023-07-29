@@ -30,6 +30,7 @@ function SignIn() {
        const {data}=await  axios.post("http://localhost:800/findUser",{username:username,password:password});
        console.log(data.code);
        if(data.code==1){
+        localStorage.setItem("username",data.username);
         setScreenState(<Home/>);
        }
     }}>Sign In</button>
